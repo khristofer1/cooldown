@@ -47,7 +47,7 @@ export function Dashboard() {
         </div>
         <button
           onClick={handleOpenNewForm}
-          className="flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 font-medium text-white shadow-sm transition-transform active:scale-[0.98] hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+          className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-5 py-2.5 font-medium text-zinc-900 shadow-sm transition-all hover:bg-zinc-50 active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-100 dark:hover:bg-zinc-800"
         >
           <Plus size={20} />
           Add Activity
