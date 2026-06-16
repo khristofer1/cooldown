@@ -49,8 +49,8 @@ describe('ActivityCard Component', () => {
 
     render(<ActivityCard activity={activeMock} onTrigger={onTrigger} />);
 
-    // 10 minutes from triggeredTime, so 10:00 initially
-    const lockBtn = screen.getByRole('button', { name: /10:00/i });
+    // 10 minutes from triggeredTime
+    const lockBtn = screen.getByRole('button', { name: /10 minutes left/i });
     expect(lockBtn).toBeDefined();
     expect((lockBtn as HTMLButtonElement).disabled).toBe(true);
 
@@ -59,6 +59,6 @@ describe('ActivityCard Component', () => {
       vi.advanceTimersByTime(60000);
     });
 
-    expect(screen.getByRole('button', { name: /09:00/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /9 minutes left/i })).toBeDefined();
   });
 });

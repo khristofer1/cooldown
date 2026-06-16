@@ -45,13 +45,13 @@ describe('Time Utilities', () => {
   it('formatTimeRemaining formats correctly < 24h', () => {
     vi.setSystemTime(new Date('2024-01-01T12:00:00Z'));
     const resetTime = new Date('2024-01-01T14:30:15Z').getTime(); // +2h 30m 15s
-    expect(formatTimeRemaining(resetTime)).toBe('02:30:15');
+    expect(formatTimeRemaining(resetTime)).toBe('2 hours, 30 minutes left');
   });
 
   it('formatTimeRemaining formats correctly > 24h', () => {
     vi.setSystemTime(new Date('2024-01-01T12:00:00Z'));
     const resetTime = new Date('2024-01-03T14:00:00Z').getTime(); // +2 days, 2 hours
-    expect(formatTimeRemaining(resetTime)).toBe('2 days, 2 hrs left');
+    expect(formatTimeRemaining(resetTime)).toBe('2 days, 2 hours left');
   });
 
   it('isAvailable returns true when past reset time', () => {

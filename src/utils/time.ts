@@ -36,8 +36,8 @@ export function isAvailable(resetTimestamp: number): boolean {
 }
 
 /**
- * Formats the remaining time into a human readable string.
- * Uses "X days, Y hours left" for >24h, or "HH:MM:SS" for <24h.
+ * Formats the remaining time into a human readable string with adaptive units.
+ * Respects singular/plural nouns (no 's' if the number is one).
  */
 export function formatTimeRemaining(resetTimestamp: number): string {
   const now = Date.now();
@@ -50,21 +50,34 @@ export function formatTimeRemaining(resetTimestamp: number): string {
   const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
   const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (days > 0) {
-    return `${days} day${days !== 1 ? 's' : ''}, ${hours} hr${hours !== 1 ? 's' : ''} left`;
-  }
+  const formatUnit = (val: number, unit: string) => {
+    return `${val} ${unit}${val !== 1 ? 's' : ''}`;
+  };
 
-  const h = String(hours).padStart(2, '0');
-  const m = String(minutes).padStart(2, '0');
-  const s = String(seconds).padStart(2, '0');
+  if (days > 0) {
+    const daysStr = formatUnit(days, 'day');
+    const hoursStr = hours > 0 ? `, ${formatUnit(hours, 'hour')}` : '';
+    return `${daysStr}${hoursStr} left`;
+  }
 
   if (hours > 0) {
-    return `${h}:${m}:${s}`;
+    const hoursStr = formatUnit(hours, 'hour');
+    const minutesStr = minutes > 0 ? `, ${formatUnit(minutes, 'minute')}` : '';
+    return `${hoursStr}${minutesStr} left`;
   }
 
-  return `${m}:${s}`;
+  if (minutes > 0) {
+    const minutesStr = formatUnit(minutes, 'minute');
+    const secondsStr = seconds > 0 ? `, ${formatUnit(seconds, 'second')}` : '';
+    return `${minutesStr}${secondsStr} left`;
+  }
+
+  return `${formatUnit(seconds, 'second')} left`;
 }
 
 export function formatCooldown(value: number, unit: CooldownUnit): string {
+  if (value === 1) {
+    return `1 ${unit.slice(0, -1)}`; // Singular form (strip trailing 's')
+  }
   return `${value} ${unit}`;
 }
