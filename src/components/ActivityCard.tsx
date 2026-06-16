@@ -86,10 +86,10 @@ export function ActivityCard({ activity, onTrigger, onDelete, onEdit }: Activity
       </div>
 
       <div className="mt-6 flex flex-col gap-3">
-        {/* Energy Bar */}
+        {/* Readiness Bar */}
         <div className="w-full">
           <div className="flex justify-between text-xs text-zinc-500 mb-1">
-            <span>Energy</span>
+            <span>Readiness</span>
             <span>{Math.round(progress)}%</span>
           </div>
           <div className="w-full h-2 bg-zinc-100 rounded-full overflow-hidden dark:bg-zinc-850">
