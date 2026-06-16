@@ -81,7 +81,7 @@ export function ActivityCard({ activity, onTrigger, onDelete, onEdit }: Activity
         {available ? (
           <button
             onClick={() => onTrigger(activity.id)}
-            className="w-full rounded-xl bg-zinc-900 py-3 font-medium text-white shadow-sm transition-transform active:scale-[0.98] dark:bg-zinc-100 dark:text-zinc-900 flex items-center justify-center gap-2 hover:bg-zinc-800 dark:hover:bg-zinc-200"
+            className="w-full rounded-xl border border-zinc-200 bg-white py-3 font-medium text-zinc-900 shadow-sm transition-all hover:bg-zinc-50 active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-2"
           >
             <CheckCircle size={20} />
             Trigger Activity
