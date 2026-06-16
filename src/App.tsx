@@ -1,10 +1,13 @@
+import { AuthProvider } from './context/AuthContext';
 import { Dashboard } from './components/Dashboard';
 
 function App() {
   return (
-    <div className="min-h-screen">
-      <Dashboard />
-    </div>
+    <AuthProvider>
+      <div className="min-h-screen">
+        <Dashboard />
+      </div>
+    </AuthProvider>
   );
 }
 
