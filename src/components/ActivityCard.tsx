@@ -14,20 +14,28 @@ interface ActivityCardProps {
 export function ActivityCard({ activity, onTrigger, onDelete, onEdit }: ActivityCardProps) {
   const [timeLeftStr, setTimeLeftStr] = useState<string>('');
   const [available, setAvailable] = useState<boolean>(true);
+  const [progress, setProgress] = useState<number>(100);
 
   useEffect(() => {
     if (!activity.lastTriggeredAt) {
       setAvailable(true);
+      setProgress(100);
       return;
     }
 
     const resetTime = getNextResetTime(activity.lastTriggeredAt, activity.cooldownValue, activity.cooldownUnit);
+    const totalDuration = resetTime - activity.lastTriggeredAt;
 
     const updateStatus = () => {
       const isAvail = isAvailable(resetTime);
       setAvailable(isAvail);
-      if (!isAvail) {
+      if (isAvail) {
+        setProgress(100);
+      } else {
         setTimeLeftStr(formatTimeRemaining(resetTime));
+        const elapsed = Date.now() - activity.lastTriggeredAt!;
+        const pct = totalDuration > 0 ? (elapsed / totalDuration) * 100 : 100;
+        setProgress(Math.min(100, Math.max(0, pct)));
       }
     };
 
@@ -77,7 +85,23 @@ export function ActivityCard({ activity, onTrigger, onDelete, onEdit }: Activity
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col items-center gap-3">
+      <div className="mt-6 flex flex-col gap-3">
+        {/* Energy Bar */}
+        <div className="w-full">
+          <div className="flex justify-between text-xs text-zinc-500 mb-1">
+            <span>Energy</span>
+            <span>{Math.round(progress)}%</span>
+          </div>
+          <div className="w-full h-2 bg-zinc-100 rounded-full overflow-hidden dark:bg-zinc-850">
+            <div 
+              className={`h-full transition-all duration-300 ${
+                progress <= 20 ? 'bg-red-500' : progress <= 50 ? 'bg-yellow-500' : 'bg-green-500'
+              }`}
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
         {available ? (
           <button
             onClick={() => onTrigger(activity.id)}
