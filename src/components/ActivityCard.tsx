@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { Activity } from '../types';
 import { getNextResetTime, formatTimeRemaining, isAvailable, formatCooldown } from '../utils/time';
 import { Clock, CheckCircle, Lock, Edit3, Trash2 } from 'lucide-react';

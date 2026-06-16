@@ -1,8 +1,7 @@
-import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ActivityCard } from '../components/ActivityCard';
-import { Activity } from '../types';
+import type { Activity } from '../types';
 
 describe('ActivityCard Component', () => {
   const mockActivity: Activity = {

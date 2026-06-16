@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ActivityCard } from './ActivityCard';
 import { ActivityForm } from './ActivityForm';
 import { useActivities } from '../hooks/useActivities';
