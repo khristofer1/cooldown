@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-family-sans: "Inter", "Roboto", "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply antialiased text-zinc-900 bg-zinc-50;
+  }
+}
