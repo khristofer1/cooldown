@@ -46,11 +46,20 @@ export function useActivities() {
     );
   };
 
+  const untriggerActivity = (id: string, previousTimestamp: number | null) => {
+    setActivities((prev) =>
+      prev.map((act) =>
+        act.id === id ? { ...act, lastTriggeredAt: previousTimestamp } : act
+      )
+    );
+  };
+
   return {
     activities,
     addActivity,
     updateActivity,
     deleteActivity,
     triggerActivity,
+    untriggerActivity,
   };
 }

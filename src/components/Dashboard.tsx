@@ -1,18 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ActivityCard } from './ActivityCard';
 import { ActivityForm } from './ActivityForm';
 import { useActivities } from '../hooks/useActivities';
-import { Plus, LayoutGrid, Timer, CheckCircle2 } from 'lucide-react';
+import { Plus, LayoutGrid, Timer, CheckCircle2, Undo2 } from 'lucide-react';
 import { isAvailable, getNextResetTime } from '../utils/time';
 import type { Activity } from '../types';
 
 type FilterType = 'All' | 'Available' | 'On Cooldown';
 
 export function Dashboard() {
-  const { activities, addActivity, updateActivity, deleteActivity, triggerActivity } = useActivities();
+  const { activities, addActivity, updateActivity, deleteActivity, triggerActivity, untriggerActivity } = useActivities();
   const [filter, setFilter] = useState<FilterType>('All');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
+  
+  const [toast, setToast] = useState<{
+    activityId: string;
+    activityName: string;
+    previousTimestamp: number | null;
+  } | null>(null);
+
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleTrigger = (id: string) => {
+    const activity = activities.find((a) => a.id === id);
+    if (!activity) return;
+
+    setToast({
+      activityId: id,
+      activityName: activity.name,
+      previousTimestamp: activity.lastTriggeredAt,
+    });
+
+    triggerActivity(id);
+
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast(null);
+    }, 5000);
+  };
+
+  const handleUndo = () => {
+    if (!toast) return;
+    untriggerActivity(toast.activityId, toast.previousTimestamp);
+    setToast(null);
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const filteredActivities = activities.filter((activity) => {
     if (filter === 'All') return true;
@@ -100,7 +145,7 @@ export function Dashboard() {
             <ActivityCard
               key={activity.id}
               activity={activity}
-              onTrigger={triggerActivity}
+              onTrigger={handleTrigger}
               onDelete={deleteActivity}
               onEdit={handleEdit}
             />
@@ -121,6 +166,24 @@ export function Dashboard() {
           }}
           onCancel={() => setIsFormOpen(false)}
         />
+      )}
+
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xl dark:border-zinc-800 dark:bg-zinc-900 animate-slide-up">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-zinc-400"></span>
+            <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+              Triggered <strong>{toast.activityName}</strong>
+            </p>
+          </div>
+          <button
+            onClick={handleUndo}
+            className="flex items-center gap-1 rounded-xl bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white transition-all hover:bg-zinc-800 active:scale-95 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          >
+            <Undo2 size={12} />
+            Undo
+          </button>
+        </div>
       )}
     </div>
   );
