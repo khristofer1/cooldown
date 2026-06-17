@@ -214,16 +214,18 @@ export function Dashboard() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`whitespace-nowrap rounded-xl px-4 py-2 font-medium transition-colors ${
+            className={`whitespace-nowrap rounded-xl px-3 py-2 sm:px-4 sm:py-2 text-sm font-medium transition-colors ${
               filter === f
                 ? 'bg-zinc-200 text-zinc-900'
                 : 'bg-transparent text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
             }`}
           >
-            {f === 'All' && <LayoutGrid size={16} className="inline mr-2" />}
-            {f === 'Available' && <CheckCircle2 size={16} className="inline mr-2" />}
-            {f === 'On Cooldown' && <Timer size={16} className="inline mr-2" />}
-            {f}
+            {f === 'All' && <LayoutGrid size={16} className={`inline ${filter === f ? 'mr-1.5' : 'mr-0 sm:mr-1.5'}`} />}
+            {f === 'Available' && <CheckCircle2 size={16} className={`inline ${filter === f ? 'mr-1.5' : 'mr-0 sm:mr-1.5'}`} />}
+            {f === 'On Cooldown' && <Timer size={16} className={`inline ${filter === f ? 'mr-1.5' : 'mr-0 sm:mr-1.5'}`} />}
+            <span className={filter === f ? 'inline' : 'hidden sm:inline'}>
+              {f}
+            </span>
           </button>
         ))}
       </div>
