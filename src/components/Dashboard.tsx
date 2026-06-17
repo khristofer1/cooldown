@@ -170,7 +170,7 @@ export function Dashboard() {
                     className="fixed inset-0 z-40" 
                     onClick={() => setShowProfileMenu(false)}
                   />
-                  <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 z-50 w-48 rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl animate-slide-up text-left">
+                  <div className="absolute right-0 mt-2 z-50 w-48 rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl animate-slide-up text-left">
                     <div className="px-3 py-2 border-b border-zinc-100 text-[11px] text-zinc-400 truncate">
                       {currentUser.email}
                     </div>
