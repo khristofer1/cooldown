@@ -99,8 +99,8 @@ export function Dashboard() {
     <div className="mx-auto max-w-5xl px-4 py-8">
       <header className="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-zinc-900 flex items-center gap-2">
-            <Timer className="text-zinc-500" />
+          <h1 className="text-3xl font-bold text-zinc-900 flex items-center gap-3">
+            <img src="/logo.jpg" alt="Cooldown Logo" className="h-8 w-8 rounded-lg object-cover shadow-sm" />
             Cooldown
           </h1>
           <p className="text-zinc-500 mt-1 flex flex-wrap items-center gap-1.5">
