@@ -170,7 +170,7 @@ export function Dashboard() {
                     className="fixed inset-0 z-40" 
                     onClick={() => setShowProfileMenu(false)}
                   />
-                  <div className="absolute right-0 mt-2 z-50 w-64 rounded-2xl border border-zinc-200 bg-white p-3 shadow-xl animate-slide-up text-left">
+                  <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 z-50 w-64 rounded-2xl border border-zinc-200 bg-white p-3 shadow-xl animate-slide-up text-left">
                     <div className="border-b border-zinc-100 pb-2.5 mb-2">
                       <p className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider">Account Info</p>
                       <p className="text-sm font-semibold text-zinc-800 truncate mt-0.5" title={currentUser.email || ''}>
