@@ -125,14 +125,14 @@ export function Dashboard() {
             <img src="/logo.png" alt="Cooldown Logo" className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg object-cover shadow-sm" />
             Cooldown
             {currentUser ? (
-              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[11px] text-green-600 bg-green-50 px-1.5 sm:px-2 py-0.5 rounded-full border border-green-100 font-medium">
+              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[11px] text-green-600 bg-green-50 px-1.5 sm:px-2 py-0.5 rounded-full border border-green-100 font-medium whitespace-nowrap">
                 <Cloud className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                <span className="hidden sm:inline">Synced</span>
+                Cloud Synced
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[11px] text-zinc-500 bg-zinc-100 px-1.5 sm:px-2 py-0.5 rounded-full border border-zinc-200 font-medium">
+              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[11px] text-zinc-500 bg-zinc-100 px-1.5 sm:px-2 py-0.5 rounded-full border border-zinc-200 font-medium whitespace-nowrap">
                 <CloudOff className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                <span className="hidden sm:inline">Local</span>
+                Local Only
               </span>
             )}
           </h1>
