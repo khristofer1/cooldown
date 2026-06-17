@@ -209,7 +209,7 @@ export function Dashboard() {
         </div>
       </header>
 
-      <div className="mb-5 sm:mb-8 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="mb-5 sm:mb-8 flex justify-center sm:justify-start gap-2 overflow-x-auto pb-2 scrollbar-hide">
         {(['All', 'Available', 'On Cooldown'] as FilterType[]).map((f) => (
           <button
             key={f}
@@ -220,12 +220,10 @@ export function Dashboard() {
                 : 'bg-transparent text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
             }`}
           >
-            {f === 'All' && <LayoutGrid size={16} className={`inline ${filter === f ? 'mr-1.5' : 'mr-0 sm:mr-1.5'}`} />}
-            {f === 'Available' && <CheckCircle2 size={16} className={`inline ${filter === f ? 'mr-1.5' : 'mr-0 sm:mr-1.5'}`} />}
-            {f === 'On Cooldown' && <Timer size={16} className={`inline ${filter === f ? 'mr-1.5' : 'mr-0 sm:mr-1.5'}`} />}
-            <span className={filter === f ? 'inline' : 'hidden sm:inline'}>
-              {f}
-            </span>
+            {f === 'All' && <LayoutGrid size={16} className="inline mr-1.5" />}
+            {f === 'Available' && <CheckCircle2 size={16} className="inline mr-1.5" />}
+            {f === 'On Cooldown' && <Timer size={16} className="inline mr-1.5" />}
+            {f}
           </button>
         ))}
       </div>
