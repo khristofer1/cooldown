@@ -170,33 +170,16 @@ export function Dashboard() {
                     className="fixed inset-0 z-40" 
                     onClick={() => setShowProfileMenu(false)}
                   />
-                  <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 z-50 w-64 rounded-2xl border border-zinc-200 bg-white p-3 shadow-xl animate-slide-up text-left">
-                    <div className="border-b border-zinc-100 pb-2.5 mb-2">
-                      <p className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider">Account Info</p>
-                      <p className="text-sm font-semibold text-zinc-800 truncate mt-0.5" title={currentUser.email || ''}>
-                        {currentUser.email}
-                      </p>
-                      <div className="mt-2 flex flex-col gap-1 text-[11px] text-zinc-500 bg-zinc-50 p-2 rounded-lg border border-zinc-150">
-                        <div className="flex justify-between">
-                          <span className="font-medium text-zinc-400">Provider:</span>
-                          <span className="font-semibold text-zinc-650">
-                            {currentUser.providerData[0]?.providerId === 'google.com' ? 'Google' : 'Email/Password'}
-                          </span>
-                        </div>
-                        <div className="flex flex-col gap-0.5 mt-1.5">
-                          <span className="font-medium text-zinc-400">User ID (UID):</span>
-                          <span className="font-mono text-[9px] bg-white border border-zinc-200 px-1.5 py-1 rounded break-all select-all font-semibold text-zinc-700">
-                            {currentUser.uid}
-                          </span>
-                        </div>
-                      </div>
+                  <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 z-50 w-48 rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl animate-slide-up text-left">
+                    <div className="px-3 py-2 border-b border-zinc-100 text-[11px] text-zinc-400 truncate">
+                      {currentUser.email}
                     </div>
                     <button
                       onClick={() => {
                         logout();
                         setShowProfileMenu(false);
                       }}
-                      className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-650 hover:bg-red-50 transition-colors text-left font-semibold"
+                      className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-650 hover:bg-red-50 transition-colors text-left font-medium"
                     >
                       <LogOut size={16} />
                       Sign Out
