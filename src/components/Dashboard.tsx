@@ -13,7 +13,8 @@ import {
   LogIn, 
   LogOut, 
   Cloud, 
-  CloudOff 
+  CloudOff,
+  AlertCircle
 } from 'lucide-react';
 import { isAvailable, getNextResetTime } from '../utils/time';
 import type { Activity } from '../types';
@@ -22,7 +23,7 @@ type FilterType = 'All' | 'Available' | 'On Cooldown';
 
 export function Dashboard() {
   const { currentUser, logout } = useAuth();
-  const { activities, addActivity, updateActivity, deleteActivity, triggerActivity, untriggerActivity } = useActivities();
+  const { activities, addActivity, updateActivity, deleteActivity, triggerActivity, untriggerActivity, error: firestoreError, clearError } = useActivities();
   const [filter, setFilter] = useState<FilterType>('All');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -97,6 +98,27 @@ export function Dashboard() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
+      {firestoreError && (
+        <div className="mb-6 flex items-start gap-3 rounded-2xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 shadow-sm relative animate-slide-up">
+          <AlertCircle size={18} className="shrink-0 mt-0.5 text-amber-600" />
+          <div className="flex-1">
+            <h4 className="font-semibold text-amber-900">Cloud Sync Alert</h4>
+            <p className="mt-0.5 text-amber-700 leading-relaxed">
+              {firestoreError}
+            </p>
+            <p className="mt-2 text-xs text-amber-600 font-medium">
+              Important: Please check your Firebase Console Firestore Database rules. If they are in locked mode or have expired, writes/reads will fail.
+            </p>
+          </div>
+          <button
+            onClick={clearError}
+            className="text-amber-600 hover:text-amber-800 transition-colors text-xs font-semibold px-2 py-1 rounded-lg hover:bg-amber-100"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       <header className="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-zinc-900 flex items-center gap-3">
@@ -148,16 +170,33 @@ export function Dashboard() {
                     className="fixed inset-0 z-40" 
                     onClick={() => setShowProfileMenu(false)}
                   />
-                  <div className="absolute right-0 mt-2 z-50 w-48 rounded-2xl border border-zinc-200 bg-white p-2 shadow-xl animate-slide-up">
-                    <div className="px-3 py-2 border-b border-zinc-100 text-[11px] text-zinc-400 truncate">
-                      {currentUser.email}
+                  <div className="absolute right-0 mt-2 z-50 w-64 rounded-2xl border border-zinc-200 bg-white p-3 shadow-xl animate-slide-up text-left">
+                    <div className="border-b border-zinc-100 pb-2.5 mb-2">
+                      <p className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider">Account Info</p>
+                      <p className="text-sm font-semibold text-zinc-800 truncate mt-0.5" title={currentUser.email || ''}>
+                        {currentUser.email}
+                      </p>
+                      <div className="mt-2 flex flex-col gap-1 text-[11px] text-zinc-500 bg-zinc-50 p-2 rounded-lg border border-zinc-150">
+                        <div className="flex justify-between">
+                          <span className="font-medium text-zinc-400">Provider:</span>
+                          <span className="font-semibold text-zinc-650">
+                            {currentUser.providerData[0]?.providerId === 'google.com' ? 'Google' : 'Email/Password'}
+                          </span>
+                        </div>
+                        <div className="flex flex-col gap-0.5 mt-1.5">
+                          <span className="font-medium text-zinc-400">User ID (UID):</span>
+                          <span className="font-mono text-[9px] bg-white border border-zinc-200 px-1.5 py-1 rounded break-all select-all font-semibold text-zinc-700">
+                            {currentUser.uid}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                     <button
                       onClick={() => {
                         logout();
                         setShowProfileMenu(false);
                       }}
-                      className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-650 hover:bg-red-50 transition-colors text-left font-medium"
+                      className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-red-650 hover:bg-red-50 transition-colors text-left font-semibold"
                     >
                       <LogOut size={16} />
                       Sign Out

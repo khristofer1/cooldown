@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, doc, setDoc, deleteDoc, updateDoc, writeBatch, onSnapshot } from 'firebase/firestore';
+import { collection, doc, setDoc, deleteDoc, updateDoc, writeBatch, onSnapshot, FirestoreError } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import type { Activity } from '../types';
@@ -9,6 +9,9 @@ const STORAGE_KEY = 'cooldown_activities';
 export function useActivities() {
   const { currentUser } = useAuth();
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const clearError = () => setError(null);
 
   // 1. Sync from LocalStorage when offline/logged-out
   useEffect(() => {
@@ -16,6 +19,7 @@ export function useActivities() {
       try {
         const item = localStorage.getItem(STORAGE_KEY);
         setActivities(item ? JSON.parse(item) : []);
+        setError(null);
       } catch (error) {
         console.error('Failed to parse activities from localStorage', error);
         setActivities([]);
@@ -33,8 +37,10 @@ export function useActivities() {
       // Keep activities sorted by creation date
       acts.sort((a, b) => a.createdAt - b.createdAt);
       setActivities(acts);
-    }, (error) => {
-      console.error('Firestore subscription error', error);
+      setError(null); // Clear error on successful read
+    }, (err: FirestoreError) => {
+      console.error('Firestore subscription error', err);
+      setError(`Sync failed: ${err.message || 'Permission denied or connection issue.'}`);
     });
 
     return unsubscribe;
@@ -63,19 +69,23 @@ export function useActivities() {
           });
           batch.commit().then(() => {
             localStorage.removeItem(STORAGE_KEY);
-          }).catch((err) => {
+            setError(null);
+          }).catch((err: FirestoreError) => {
             console.error('Batch commit migration failed', err);
+            setError(`Failed to migrate local data: ${err.message}`);
           });
         } else {
           localStorage.removeItem(STORAGE_KEY);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Failed to migrate local activities', err);
+        setError('Failed to parse local activities for migration.');
       }
     }
   }, [currentUser]);
 
   const addActivity = async (activity: Omit<Activity, 'id' | 'createdAt' | 'lastTriggeredAt'>) => {
+    setError(null);
     const id = crypto.randomUUID();
     const newActivity: Activity = {
       ...activity,
@@ -85,17 +95,29 @@ export function useActivities() {
     };
 
     if (currentUser) {
-      const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
-      await setDoc(docRef, newActivity);
+      try {
+        const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
+        await setDoc(docRef, newActivity);
+      } catch (err: any) {
+        console.error('Firestore addActivity error', err);
+        setError(`Failed to save activity: ${err.message || 'Permission denied.'}`);
+        throw err;
+      }
     } else {
       setActivities((prev) => [...prev, newActivity]);
     }
   };
 
   const updateActivity = async (id: string, updates: Partial<Omit<Activity, 'id' | 'createdAt'>>) => {
+    setError(null);
     if (currentUser) {
-      const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
-      await updateDoc(docRef, updates);
+      try {
+        const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
+        await updateDoc(docRef, updates);
+      } catch (err: any) {
+        console.error('Firestore updateActivity error', err);
+        setError(`Failed to update activity: ${err.message || 'Permission denied.'}`);
+      }
     } else {
       setActivities((prev) =>
         prev.map((act) => (act.id === id ? { ...act, ...updates } : act))
@@ -104,19 +126,31 @@ export function useActivities() {
   };
 
   const deleteActivity = async (id: string) => {
+    setError(null);
     if (currentUser) {
-      const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
-      await deleteDoc(docRef);
+      try {
+        const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
+        await deleteDoc(docRef);
+      } catch (err: any) {
+        console.error('Firestore deleteActivity error', err);
+        setError(`Failed to delete activity: ${err.message || 'Permission denied.'}`);
+      }
     } else {
       setActivities((prev) => prev.filter((act) => act.id !== id));
     }
   };
 
   const triggerActivity = async (id: string) => {
+    setError(null);
     const timestamp = Date.now();
     if (currentUser) {
-      const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
-      await updateDoc(docRef, { lastTriggeredAt: timestamp });
+      try {
+        const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
+        await updateDoc(docRef, { lastTriggeredAt: timestamp });
+      } catch (err: any) {
+        console.error('Firestore triggerActivity error', err);
+        setError(`Failed to trigger activity: ${err.message || 'Permission denied.'}`);
+      }
     } else {
       setActivities((prev) =>
         prev.map((act) =>
@@ -127,9 +161,15 @@ export function useActivities() {
   };
 
   const untriggerActivity = async (id: string, previousTimestamp: number | null) => {
+    setError(null);
     if (currentUser) {
-      const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
-      await updateDoc(docRef, { lastTriggeredAt: previousTimestamp });
+      try {
+        const docRef = doc(db, 'users', currentUser.uid, 'activities', id);
+        await updateDoc(docRef, { lastTriggeredAt: previousTimestamp });
+      } catch (err: any) {
+        console.error('Firestore untriggerActivity error', err);
+        setError(`Failed to undo activity trigger: ${err.message || 'Permission denied.'}`);
+      }
     } else {
       setActivities((prev) =>
         prev.map((act) =>
@@ -146,5 +186,7 @@ export function useActivities() {
     deleteActivity,
     triggerActivity,
     untriggerActivity,
+    error,
+    clearError,
   };
 }
