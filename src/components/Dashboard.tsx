@@ -283,7 +283,7 @@ export function Dashboard() {
       )}
 
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xl animate-slide-up">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-50 flex items-center justify-between gap-4 w-[calc(100%-32px)] sm:w-auto max-w-md rounded-2xl border border-zinc-200 bg-white p-4 shadow-xl animate-slide-up">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-zinc-400"></span>
             <p className="text-sm font-medium text-zinc-950">
