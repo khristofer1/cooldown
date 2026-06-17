@@ -57,42 +57,42 @@ export function ActivityCard({ activity, onTrigger, onDelete, onEdit }: Activity
   const IconComponent = activity.icon && LucideIcons[activity.icon] ? LucideIcons[activity.icon] : Clock;
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl border p-5 transition-all duration-300 ${available ? 'border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 hover:shadow-md' : 'border-zinc-100 bg-zinc-50 dark:border-zinc-800/50 dark:bg-zinc-900/20'}`}>
+    <div className={`relative overflow-hidden rounded-2xl border p-4 sm:p-5 transition-all duration-300 ${available ? 'border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50 hover:shadow-md' : 'border-zinc-100 bg-zinc-50 dark:border-zinc-800/50 dark:bg-zinc-900/20'}`}>
       <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-xl ${available ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100' : 'bg-zinc-100 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500'}`}>
-            <IconComponent size={24} />
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className={`p-1.5 sm:p-2 rounded-xl ${available ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100' : 'bg-zinc-100 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500'}`}>
+            <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
           <div>
-            <h3 className={`font-semibold text-lg ${available ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500 dark:text-zinc-400'}`}>{activity.name}</h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <h3 className={`font-semibold text-base sm:text-lg leading-tight ${available ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500 dark:text-zinc-400'}`}>{activity.name}</h3>
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
               Cooldown: {formatCooldown(activity.cooldownValue, activity.cooldownUnit)}
             </p>
           </div>
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2">
           {onEdit && (
-            <button onClick={() => onEdit(activity)} className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors" aria-label="Edit">
-              <Edit3 size={18} />
+            <button onClick={() => onEdit(activity)} className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors" aria-label="Edit">
+              <Edit3 size={16} className="sm:w-[18px] sm:h-[18px]" />
             </button>
           )}
           {onDelete && (
-            <button onClick={() => onDelete(activity.id)} className="p-2 text-zinc-400 hover:text-red-500 transition-colors" aria-label="Delete">
-              <Trash2 size={18} />
+            <button onClick={() => onDelete(activity.id)} className="p-1.5 text-zinc-400 hover:text-red-500 transition-colors" aria-label="Delete">
+              <Trash2 size={16} className="sm:w-[18px] sm:h-[18px]" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="mt-4 sm:mt-6 flex flex-col gap-3">
         {/* Readiness Bar */}
         <div className="w-full">
-          <div className="flex justify-between text-xs text-zinc-500 mb-1">
+          <div className="flex justify-between text-[11px] sm:text-xs text-zinc-500 mb-1">
             <span>Readiness</span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="w-full h-2 bg-zinc-100 rounded-full overflow-hidden dark:bg-zinc-850">
+          <div className="w-full h-1.5 sm:h-2 bg-zinc-100 rounded-full overflow-hidden dark:bg-zinc-850">
             <div 
               className={`h-full transition-all duration-300 ${
                 progress <= 20 ? 'bg-red-500' : progress <= 50 ? 'bg-yellow-500' : 'bg-green-500'
@@ -105,17 +105,17 @@ export function ActivityCard({ activity, onTrigger, onDelete, onEdit }: Activity
         {available ? (
           <button
             onClick={() => onTrigger(activity.id)}
-            className="w-full rounded-xl border border-zinc-200 bg-white py-3 font-medium text-zinc-900 shadow-sm transition-all hover:bg-zinc-50 active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-2"
+            className="w-full rounded-xl border border-zinc-200 bg-white py-2.5 sm:py-3 text-sm sm:text-base font-medium text-zinc-900 shadow-sm transition-all hover:bg-zinc-50 active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center gap-1.5"
           >
-            <CheckCircle size={20} />
+            <CheckCircle size={18} />
             Trigger Activity
           </button>
         ) : (
           <button
             disabled
-            className="w-full rounded-xl bg-zinc-100 py-3 font-medium text-zinc-400 flex items-center justify-center gap-2 cursor-not-allowed dark:bg-zinc-800/50 dark:text-zinc-500"
+            className="w-full rounded-xl bg-zinc-100 py-2.5 sm:py-3 text-sm sm:text-base font-medium text-zinc-400 flex items-center justify-center gap-1.5 cursor-not-allowed dark:bg-zinc-800/50 dark:text-zinc-500"
           >
-            <Lock size={20} />
+            <Lock size={18} />
             {timeLeftStr}
           </button>
         )}

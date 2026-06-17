@@ -97,7 +97,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
+    <div className="mx-auto max-w-5xl px-4 py-5 sm:py-8">
       {firestoreError && (
         <div className="mb-6 flex items-start gap-3 rounded-2xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800 shadow-sm relative animate-slide-up">
           <AlertCircle size={18} className="shrink-0 mt-0.5 text-amber-600" />
@@ -119,43 +119,43 @@ export function Dashboard() {
         </div>
       )}
 
-      <header className="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <header className="mb-5 sm:mb-10 flex flex-row items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-zinc-900 flex items-center gap-3">
-            <img src="/logo.png" alt="Cooldown Logo" className="h-8 w-8 rounded-lg object-cover shadow-sm" />
+          <h1 className="text-xl sm:text-3xl font-bold text-zinc-900 flex items-center gap-1.5 sm:gap-3">
+            <img src="/logo.png" alt="Cooldown Logo" className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg object-cover shadow-sm" />
             Cooldown
-          </h1>
-          <p className="text-zinc-500 mt-1 flex flex-wrap items-center gap-1.5">
-            Manage your activities and habits.
             {currentUser ? (
-              <span className="inline-flex items-center gap-1 text-[11px] text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-100 font-medium">
-                <Cloud size={10} />
-                Cloud Synced
+              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[11px] text-green-600 bg-green-50 px-1.5 sm:px-2 py-0.5 rounded-full border border-green-100 font-medium">
+                <Cloud className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                <span className="hidden sm:inline">Synced</span>
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 text-[11px] text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full border border-zinc-200 font-medium">
-                <CloudOff size={10} />
-                Local Only
+              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[11px] text-zinc-500 bg-zinc-100 px-1.5 sm:px-2 py-0.5 rounded-full border border-zinc-200 font-medium">
+                <CloudOff className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                <span className="hidden sm:inline">Local</span>
               </span>
             )}
+          </h1>
+          <p className="text-zinc-500 mt-1 text-sm hidden sm:block">
+            Manage your activities and habits.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {currentUser ? (
             <div className="relative">
               <button
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white p-2 hover:bg-zinc-50 transition-colors shadow-sm"
+                className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white p-1.5 sm:p-2 hover:bg-zinc-50 transition-colors shadow-sm"
               >
                 {currentUser.photoURL ? (
                   <img
                     src={currentUser.photoURL}
                     alt={currentUser.displayName || 'Profile'}
-                    className="h-7 w-7 rounded-lg object-cover"
+                    className="h-6 w-6 sm:h-7 sm:w-7 rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-100 text-xs font-semibold text-zinc-700">
+                  <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-zinc-100 text-[10px] sm:text-xs font-semibold text-zinc-700">
                     {currentUser.email?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 )}
@@ -191,24 +191,25 @@ export function Dashboard() {
           ) : (
             <button
               onClick={() => setIsLoginOpen(true)}
-              className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 font-medium text-zinc-700 shadow-sm transition-all hover:bg-zinc-50 active:scale-[0.98]"
+              className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-zinc-200 bg-white px-2.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-medium text-zinc-700 shadow-sm transition-all hover:bg-zinc-50 active:scale-[0.98]"
             >
-              <LogIn size={18} />
-              Sign In to Sync
+              <LogIn className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
+              <span>Sign In</span>
+              <span className="hidden sm:inline"> to Sync</span>
             </button>
           )}
 
           <button
             onClick={handleOpenNewForm}
-            className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-5 py-2.5 font-medium text-zinc-900 shadow-sm transition-all hover:bg-zinc-50 active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-100 dark:hover:bg-zinc-800"
+            className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-zinc-200 bg-white p-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-medium text-zinc-900 shadow-sm transition-all hover:bg-zinc-50 active:scale-[0.98] dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-100 dark:hover:bg-zinc-800"
           >
-            <Plus size={20} />
-            Add Activity
+            <Plus className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
+            <span className="hidden sm:inline">Add Activity</span>
           </button>
         </div>
       </header>
 
-      <div className="mb-8 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="mb-5 sm:mb-8 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
         {(['All', 'Available', 'On Cooldown'] as FilterType[]).map((f) => (
           <button
             key={f}
